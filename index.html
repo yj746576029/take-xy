@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>在图片中获取XY坐标点（pc端）</title>
+</head>
+
+<body style="margin: 0;">
+    <canvas id="canvas">您的浏览器不支持canvas</canvas>
+    <div id="xycoordinates" style="position: fixed;top: 0;left:0;background-color: white;"></div>
+    <script>
+        var canvas = document.getElementById("canvas");
+        var pic = canvas.getContext("2d");
+        var lineX = canvas.getContext("2d");
+        var lineY = canvas.getContext("2d");
+        var img = new Image()
+        img.src = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1602996881048&di=d6b76104779804149879cd05b6b21af7&imgtype=0&src=http%3A%2F%2Fwww.yiyuen.com%2Fpic%2Ffj%2F20130219012149587958.jpg";
+        img.onload = function () {
+            w = img.width;
+            h = img.height;
+            console.log(w + "  " + h)
+            canvas.width = w;
+            canvas.height = h;
+            canvas.addEventListener('mousemove', function (e) {
+                x = e.pageX;
+                y = e.pageY;
+                canvas.width = canvas.width
+                pic.drawImage(img, 0, 0);
+
+                lineX.lineWidth = 1; //设置线宽
+                lineX.strokeStyle = 'red'; //设置线颜色
+                lineX.beginPath(); //开始绘制路径
+                lineX.moveTo(x, 0); //移动至起始点
+                lineX.lineTo(x, h); //移动至终点
+                lineX.closePath();//闭合路径
+                lineX.stroke(); //绘制
+
+                lineY.lineWidth = 1; //设置线宽
+                lineY.strokeStyle = 'red'; //设置线颜色
+                lineY.beginPath(); //开始绘制路径
+                lineY.lineTo(0, y); //移动至起始点
+                lineY.lineTo(w, y); //移动至终点
+                lineY.closePath(); //闭合路径
+                lineY.stroke(); //绘制
+                document.getElementById("xycoordinates").innerHTML = "XY坐标: (" + x + "," + y + ")";
+            }, false);
+            canvas.addEventListener('mouseout', function (e) {
+                document.getElementById("xycoordinates").innerHTML = "";
+            }, false);
+            pic.drawImage(img, 0, 0);
+        }
+    </script>
+</body>
+
+</html>
