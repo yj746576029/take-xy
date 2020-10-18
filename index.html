@@ -8,23 +8,24 @@
 
 <body style="margin: 0;">
     <canvas id="canvas">您的浏览器不支持canvas</canvas>
-    <div id="xycoordinates" style="position: fixed;top: 0;left:0;background-color: white;"></div>
+    <textarea id="input" style="position: absolute;top: 0;left: 0;opacity: 0;z-index: -10;"></textarea>
     <script>
         var canvas = document.getElementById("canvas");
         var pic = canvas.getContext("2d");
         var lineX = canvas.getContext("2d");
         var lineY = canvas.getContext("2d");
+        var txt = canvas.getContext('2d');
         var img = new Image()
         img.src = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1602996881048&di=d6b76104779804149879cd05b6b21af7&imgtype=0&src=http%3A%2F%2Fwww.yiyuen.com%2Fpic%2Ffj%2F20130219012149587958.jpg";
         img.onload = function () {
-            w = img.width;
-            h = img.height;
+            var w = img.width;
+            var h = img.height;
             console.log(w + "  " + h)
             canvas.width = w;
             canvas.height = h;
             canvas.addEventListener('mousemove', function (e) {
-                x = e.pageX;
-                y = e.pageY;
+                var x = e.pageX;
+                var y = e.pageY;
                 canvas.width = canvas.width
                 pic.drawImage(img, 0, 0);
 
@@ -43,10 +44,20 @@
                 lineY.lineTo(w, y); //移动至终点
                 lineY.closePath(); //闭合路径
                 lineY.stroke(); //绘制
-                document.getElementById("xycoordinates").innerHTML = "XY坐标: (" + x + "," + y + ")";
+
+                txt.font="30px 宋体";
+				txt.fillStyle = '#FFFFFF';
+				txt.fillText(x + "," + y, x, y);
+                
+                document.getElementById("input").value =  x + "," + y ;
             }, false);
-            canvas.addEventListener('mouseout', function (e) {
-                document.getElementById("xycoordinates").innerHTML = "";
+            canvas.addEventListener('click', function (e) {
+                var x = e.pageX;
+                var y = e.pageY;
+				var input = document.getElementById("input");
+				input.select(); // 选中文本
+				document.execCommand("copy"); // 执行浏览器复制命令
+				alert("复制成功,坐标为 "+ x + "," + y);
             }, false);
             pic.drawImage(img, 0, 0);
         }
